@@ -13,6 +13,19 @@ True. False. It’s complicated.
 
 ## First Time Setup
 
+### Install Python
+This project uses Python v3.12 as indicated in the `.pyversion` file. Refer to [Python's official page for v3.12](https://www.python.org/downloads/release/python-3120/) for an install.
+### Install uv
+Windows (Powershell)
+```
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+macOS and Linux
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
 ## API Reference
 
 ## How I'd Improve this
@@ -21,19 +34,17 @@ True. False. It’s complicated.
 
 ## Credits
 
+---
 
-## File Structure
-project
-|-- app/
-|   |-- models/
-|   |-- services/
-|   |-- routes/
-|   |-- state/
-|   |-- main.py
-|-- tests/
-|   |-- test.py
-|-- Makefile
-|-- requirements.txt
-|-- pyprpoject.toml
-|-- README.md
+## Troubleshooting
 
+### Managing Dependencies
+Adding dependencies to the pyproject.toml
+```
+uv add 'requests==2.31.0'
+```
+Remove a package
+```
+uv remove requests
+```
+To upgrade a package
