@@ -25,6 +25,11 @@ macOS and Linux
 ```
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
+### Sync dependencies outlined in `pyproject.toml`
+Run 
+```
+uv sync
+```
 
 ## API Reference
 
@@ -47,4 +52,5 @@ Remove a package
 ```
 uv remove requests
 ```
-To upgrade a package
+
+> For more, visit [Astral's documentation for `uv`](https://docs.astral.sh/uv/guides/projects/#creating-a-new-project)
