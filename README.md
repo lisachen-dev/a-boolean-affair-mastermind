@@ -99,6 +99,27 @@ make run
 
 ## Troubleshooting
 
+### IntelliJ: Missing packages after `uv sync`
+Point the IDE at the project venv::
+1. `IntelliJ IDEA: File > Project Structure > SDKs > Name + Existing environment > `*/a-boolean-affair/.venv/Scripts/python.exe` > then select SDK in Modules > Module SDK > Select that SDK > Apply`
+2. File > Invalidate caches > Just select OK.
+
+### `uv` and Switching Between Projects
+You do not need to activate/deactive virtual environments manually.
+`uv` will auto use `.venv` for the current project directory.
+
+This warning means your shell still has an environment variable from another project:
+```
+   VIRTUAL_ENV=/path/to/other/.venv does not match the project environment path `.venv` and will be ignored
+```
+
+**Fix**
+
+```
+unset VIRTUAL_ENV
+uv sync
+```
+
 ### Managing Dependencies
 Adding dependencies to the pyproject.toml
 
