@@ -1,3 +1,5 @@
+
+
 install:
 	uv sync
 run:
@@ -7,6 +9,6 @@ lint:
 	uv run ruff check .
 
 format:
-	uv run ruff format .
-	uv run ruff check . --select I --fix
+	uv run ruff format .					# code style auto-format
+	uv run ruff check . --select I --fix	# lint imports and auto fixes
 

@@ -15,7 +15,5 @@ dependencies = [
     "ruff==0.12.8"
 ]
 
-[tool.ruff]
-
 [tool.ruff.format]
 indent-style = "tab"
