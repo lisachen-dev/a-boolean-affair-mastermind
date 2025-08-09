@@ -4,7 +4,7 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
 
-# TODO reminder to wrute validation in server/ (guess_value / attempt_num etc)
+# TODO reminder to write validation in server/ (guess_value / attempt_num etc)
 class GuessBase(BaseModel):
 	guess_value: str
 
