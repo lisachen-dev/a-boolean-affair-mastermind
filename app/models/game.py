@@ -5,7 +5,14 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-from app.constants import ALLOW_REPEATS, CODE_LENGTH, MAX_DIGIT, MAX_GUESSES, MIN_DIGIT
+from app.constants import (
+	ALLOW_REPEATS,
+	CODE_LENGTH,
+	MAX_DIGIT,
+	MAX_GUESSES,
+	MIN_DIGIT,
+	RANDOM_EXTERNAL,
+)
 from app.models.guess import Guess
 
 
@@ -22,6 +29,7 @@ class GameCreate(BaseModel):
 	min_digit: Optional[int] = None
 	max_digit: Optional[int] = None
 	allow_repeats: Optional[bool] = None
+	random_external: Optional[bool] = None
 
 
 class Game(BaseModel):
@@ -48,6 +56,10 @@ class Game(BaseModel):
 	)
 	allow_repeats: bool = Field(
 		default=ALLOW_REPEATS, description="allows non-unique values"
+	)
+	random_external: bool = Field(
+		default=RANDOM_EXTERNAL,
+		description="toggle between using internal and external code generation",
 	)
 
 	created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
