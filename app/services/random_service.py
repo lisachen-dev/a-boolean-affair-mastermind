@@ -13,6 +13,7 @@ RANDOM_BASE_URL = "https://www.random.org/integers/"
 def _validate_provided_parameters(
 	code_length: int, min_value: int, max_value: int, allow_repeats: bool
 ) -> None:
+	""" Validate that the parameters passed in are valid """
 	if code_length <= 0:
 		raise ValueError("[RULE]: Code length cannot go below 0")
 
@@ -34,6 +35,7 @@ def _validate_secret(
 	max_value: int,
 	allow_repeats: bool,
 ) -> None:
+	""" Validate that the secret code falls within rule parameters """
 	if len(secret) != code_length:
 		raise ValueError("[SECRET] Secret length is invalid code length")
 
@@ -53,11 +55,7 @@ def generate_secret_code(
 	max_value: int,
 	allow_repeats: bool,
 ) -> list[str]:
-	"""
-	TODO: write better docstring
-	Generate a numeric secret code
-	https://stackoverflow.com/questions/2257441/random-string-generation-with-upper-case-letters-and-digits/23728630#23728630
-	"""
+	""" Generate a numeric secret code using either Python's secrets (internal) or random.org (external) """
 	_validate_provided_parameters(code_length, min_value, max_value, allow_repeats)
 
 	if external_code:
@@ -79,6 +77,7 @@ def generate_secret_code(
 def _generate_internal_code(
 	code_length: int, min_value: int, max_value: int, allow_repeats: bool
 ) -> list[str]:
+	""" Generate the secret code using Python's secrets module """
 	rand_num_generator = secrets.SystemRandom()
 	pool = list(range(min_value, max_value + 1))
 
@@ -92,9 +91,10 @@ def _generate_internal_code(
 		values = rand_num_generator.sample(pool, code_length)
 
 	secret_list = [str(value) for value in values]
-	logger.info("The secret code was generated using Python's secrets module!")
 
 	_validate_secret(secret_list, code_length, min_value, max_value, allow_repeats)
+
+	logger.info("The secret code was generated using Python's secrets module!")
 
 	return secret_list
 
@@ -105,8 +105,8 @@ def _generate_external_code(
 	max_value: int,
 	allow_repeats: bool,
 ) -> list[str]:
+	""" Generate the secret code using Random.org """
 	is_unique = "off" if allow_repeats else "on"
-
 	payload = {
 		"num": code_length,
 		"min": min_value,
@@ -147,15 +147,14 @@ def _generate_external_code(
 		)
 
 	secret_list = []
-
 	for line in response.text.splitlines():
 		trimmed_line = line.strip()
 
 		if trimmed_line:
 			secret_list.append(trimmed_line)
 
-	logger.info("The secret code was generated using random.org!")
-
 	_validate_secret(secret_list, code_length, min_value, max_value, allow_repeats)
+
+	logger.info("The secret code was generated using random.org!")
 
 	return secret_list
