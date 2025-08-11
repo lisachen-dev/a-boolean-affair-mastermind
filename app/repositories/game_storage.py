@@ -3,10 +3,10 @@ import logging
 from app.constants import (
 	ALLOW_REPEATS,
 	CODE_LENGTH,
+	IS_EXTERNAL_CODE,
 	MAX_GUESSES,
 	MAX_VALUE,
 	MIN_VALUE,
-	IS_EXTERNAL_CODE,
 )
 from app.models.game import Game, GameCreate
 
