@@ -10,12 +10,8 @@ RANDOM_BASE_URL = "https://www.random.org/integers/"
 
 
 def _validate_provided_parameters(
-		code_length: int,
-		min_digit: int,
-		max_digit: int,
-		allow_repeats: bool
+	code_length: int, min_digit: int, max_digit: int, allow_repeats: bool
 ) -> None:
-
 	if code_length <= 0:
 		raise ValueError("[RULE]: Code length cannot go below 0")
 
@@ -25,16 +21,14 @@ def _validate_provided_parameters(
 	if not allow_repeats:
 		pool_size = max_digit - min_digit + 1
 		if code_length > pool_size:
-			raise ValueError("[RULE] Pool size not large enough to handle unique values")
+			raise ValueError(
+				"[RULE] Pool size not large enough to handle unique values"
+			)
+
 
 def _validate_secret(
-		secret: str,
-		code_length: int,
-		min_digit: int,
-		max_digit: int,
-		allow_repeats: bool
+	secret: str, code_length: int, min_digit: int, max_digit: int, allow_repeats: bool
 ) -> None:
-
 	if len(secret) != code_length:
 		raise ValueError("[SECRET] Secret length is invalid code length")
 
@@ -42,14 +36,17 @@ def _validate_secret(
 		raise ValueError("[SECRET] Part or all of the secret values are out of range")
 
 	if not allow_repeats and len(set(secret)) != code_length:
-		raise ValueError("[SECRET] Duplicates are found, but allow_repeats is set to False")
+		raise ValueError(
+			"[SECRET] Duplicates are found, but allow_repeats is set to False"
+		)
+
 
 def generate_secret_code(
 	external_code: bool,
 	code_length: int,
 	min_digit: int,
 	max_digit: int,
-	allow_repeats: bool
+	allow_repeats: bool,
 ) -> str:
 	"""
 	TODO Create explanative docstring
@@ -87,7 +84,6 @@ def generate_external_code(
 	max_digit: int,
 	allow_repeats: bool,
 ) -> str:
-
 	_validate_provided_parameters(code_length, min_digit, max_digit, allow_repeats)
 
 	is_unique = "off" if allow_repeats else "on"
@@ -113,27 +109,32 @@ def generate_external_code(
 		response.raise_for_status()
 
 	except Timeout:
-		raise HTTPException(status_code=500, detail="The request to the random number service timed out")
+		raise HTTPException(
+			status_code=500, detail="The request to the random number service timed out"
+		)
 
 	except ConnectionError:
-		raise HTTPException(status_code=500, detail="The random number service returned an error")
+		raise HTTPException(
+			status_code=500, detail="The random number service returned an error"
+		)
 
 	except HTTPError:
 		raise HTTPException(status_code=500, detail="Could not connect to random.org")
 
 	except RequestException:
-		raise HTTPException(status_code=500, detail="An unexpected error occurred while connecting with random.org")
+		raise HTTPException(
+			status_code=500,
+			detail="An unexpected error occurred while connecting with random.org",
+		)
 
-	format_response = response.text.replace("\n","").strip()
-	_validate_secret(format_response,code_length, min_digit, max_digit, allow_repeats)
+	format_response = response.text.replace("\n", "").strip()
+	_validate_secret(format_response, code_length, min_digit, max_digit, allow_repeats)
 	return format_response
+
 
 # TODO: remove this once you're done testing
 if __name__ == "__main__":
 	code = generate_external_code(
-		code_length=4,
-		min_digit=0,
-		max_digit=9,
-		allow_repeats=False
+		code_length=4, min_digit=0, max_digit=9, allow_repeats=False
 	)
 	print(f"Generated code: {code}")
