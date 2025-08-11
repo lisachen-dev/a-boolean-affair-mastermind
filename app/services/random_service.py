@@ -1,6 +1,5 @@
-import secrets
-
 import logging
+import secrets
 
 import requests
 from fastapi import HTTPException
@@ -14,7 +13,6 @@ RANDOM_BASE_URL = "https://www.random.org/integers/"
 def _validate_provided_parameters(
 	code_length: int, min_value: int, max_value: int, allow_repeats: bool
 ) -> None:
-
 	if code_length <= 0:
 		raise ValueError("[RULE]: Code length cannot go below 0")
 
@@ -30,9 +28,12 @@ def _validate_provided_parameters(
 
 
 def _validate_secret(
-	secret: list[str], code_length: int, min_value: int, max_value: int, allow_repeats: bool
+	secret: list[str],
+	code_length: int,
+	min_value: int,
+	max_value: int,
+	allow_repeats: bool,
 ) -> None:
-
 	if len(secret) != code_length:
 		raise ValueError("[SECRET] Secret length is invalid code length")
 
@@ -78,7 +79,6 @@ def generate_secret_code(
 def _generate_internal_code(
 	code_length: int, min_value: int, max_value: int, allow_repeats: bool
 ) -> list[str]:
-
 	rand_num_generator = secrets.SystemRandom()
 	pool = list(range(min_value, max_value + 1))
 
@@ -86,7 +86,9 @@ def _generate_internal_code(
 		values = [rand_num_generator.choice(pool) for _ in range(code_length)]
 	else:
 		if code_length > len(pool):
-			raise ValueError("Allow repeats is set to False and code length is greater than pool of allowed values")
+			raise ValueError(
+				"Allow repeats is set to False and code length is greater than pool of allowed values"
+			)
 		values = rand_num_generator.sample(pool, code_length)
 
 	secret_list = [str(value) for value in values]
@@ -103,7 +105,6 @@ def _generate_external_code(
 	max_value: int,
 	allow_repeats: bool,
 ) -> list[str]:
-
 	is_unique = "off" if allow_repeats else "on"
 
 	payload = {

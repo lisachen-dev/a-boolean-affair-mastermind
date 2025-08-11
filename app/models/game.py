@@ -8,8 +8,8 @@ from pydantic import BaseModel, Field
 from app.constants import (
 	ALLOW_REPEATS,
 	CODE_LENGTH,
-	MAX_VALUE,
 	MAX_GUESSES,
+	MAX_VALUE,
 	MIN_VALUE,
 	RANDOM_EXTERNAL,
 )
