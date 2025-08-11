@@ -8,9 +8,9 @@ from pydantic import BaseModel, Field
 from app.constants import (
 	ALLOW_REPEATS,
 	CODE_LENGTH,
-	MAX_DIGIT,
+	MAX_VALUE,
 	MAX_GUESSES,
-	MIN_DIGIT,
+	MIN_VALUE,
 	RANDOM_EXTERNAL,
 )
 from app.models.guess import Guess
@@ -26,8 +26,8 @@ class GameCreate(BaseModel):
 	player_id: UUID
 	code_length: Optional[int] = None
 	max_guesses: Optional[int] = None
-	min_digit: Optional[int] = None
-	max_digit: Optional[int] = None
+	min_value: Optional[int] = None
+	max_value: Optional[int] = None
 	allow_repeats: Optional[bool] = None
 	random_external: Optional[bool] = None
 
@@ -47,12 +47,12 @@ class Game(BaseModel):
 	max_guesses: int = Field(
 		default=MAX_GUESSES, description="sets limit on amount of guesses user has"
 	)
-	min_digit: int = Field(
-		default=MIN_DIGIT,
+	min_value: int = Field(
+		default=MIN_VALUE,
 		description="sets min value on range of digits allowed",
 	)
-	max_digit: int = Field(
-		default=MAX_DIGIT, description="sets max value on range of digits allowed"
+	max_value: int = Field(
+		default=MAX_VALUE, description="sets max value on range of digits allowed"
 	)
 	allow_repeats: bool = Field(
 		default=ALLOW_REPEATS, description="allows non-unique values"
