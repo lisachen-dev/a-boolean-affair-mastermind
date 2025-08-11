@@ -6,7 +6,7 @@ from app.constants import (
 	MAX_GUESSES,
 	MAX_VALUE,
 	MIN_VALUE,
-	RANDOM_EXTERNAL,
+	IS_EXTERNAL_CODE,
 )
 from app.models.game import Game, GameCreate
 
@@ -49,7 +49,7 @@ class GameStorage:
 			random_external=(
 				game_create.random_external
 				if game_create.random_external is not None
-				else RANDOM_EXTERNAL
+				else IS_EXTERNAL_CODE
 			),
 		)
 

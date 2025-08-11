@@ -11,7 +11,7 @@ from app.constants import (
 	MAX_GUESSES,
 	MAX_VALUE,
 	MIN_VALUE,
-	RANDOM_EXTERNAL,
+	IS_EXTERNAL_CODE,
 )
 from app.models.guess import Guess
 
@@ -58,7 +58,7 @@ class Game(BaseModel):
 		default=ALLOW_REPEATS, description="allows non-unique values"
 	)
 	random_external: bool = Field(
-		default=RANDOM_EXTERNAL,
+		default=IS_EXTERNAL_CODE,
 		description="toggle between using internal and external code generation",
 	)
 

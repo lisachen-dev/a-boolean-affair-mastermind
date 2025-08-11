@@ -12,6 +12,8 @@ class RandomService:
 	RANDOM_BASE_URL = "https://www.random.org/integers/"
 
 	def __init__(self, external_code: bool = True):
+		if not isinstance(external_code, bool):
+			raise TypeError("external_code must be a boolean")
 		self.external_code = external_code
 
 	def generate_secret_code(
