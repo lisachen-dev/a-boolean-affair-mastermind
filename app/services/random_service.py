@@ -13,7 +13,7 @@ RANDOM_BASE_URL = "https://www.random.org/integers/"
 def _validate_provided_parameters(
 	code_length: int, min_value: int, max_value: int, allow_repeats: bool
 ) -> None:
-	""" Validate that the parameters passed in are valid """
+	"""Validate that the parameters passed in are valid"""
 	if code_length <= 0:
 		raise ValueError("[RULE]: Code length cannot go below 0")
 
@@ -35,7 +35,7 @@ def _validate_secret(
 	max_value: int,
 	allow_repeats: bool,
 ) -> None:
-	""" Validate that the secret code falls within rule parameters """
+	"""Validate that the secret code falls within rule parameters"""
 	if len(secret) != code_length:
 		raise ValueError("[SECRET] Secret length is invalid code length")
 
@@ -55,7 +55,7 @@ def generate_secret_code(
 	max_value: int,
 	allow_repeats: bool,
 ) -> list[str]:
-	""" Generate a numeric secret code using either Python's secrets (internal) or random.org (external) """
+	"""Generate a numeric secret code using either Python's secrets (internal) or random.org (external)"""
 	_validate_provided_parameters(code_length, min_value, max_value, allow_repeats)
 
 	if external_code:
@@ -77,7 +77,7 @@ def generate_secret_code(
 def _generate_internal_code(
 	code_length: int, min_value: int, max_value: int, allow_repeats: bool
 ) -> list[str]:
-	""" Generate the secret code using Python's secrets module """
+	"""Generate the secret code using Python's secrets module"""
 	rand_num_generator = secrets.SystemRandom()
 	pool = list(range(min_value, max_value + 1))
 
@@ -105,7 +105,7 @@ def _generate_external_code(
 	max_value: int,
 	allow_repeats: bool,
 ) -> list[str]:
-	""" Generate the secret code using Random.org """
+	"""Generate the secret code using Random.org"""
 	is_unique = "off" if allow_repeats else "on"
 	payload = {
 		"num": code_length,
