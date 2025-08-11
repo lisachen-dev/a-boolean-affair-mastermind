@@ -38,7 +38,7 @@ class Game(BaseModel):
 	player_id: UUID
 	guesses: list[Guess] = Field(default_factory=list)
 
-	secret: list[int] = Field(exclude=True)
+	secret: str = Field(exclude=True)
 	finished_at: datetime | None = None
 
 	code_length: int = Field(

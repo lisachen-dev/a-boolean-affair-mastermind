@@ -69,6 +69,8 @@ You may need Xcode Command Line Tools:
 
 [//]: # (TODO: env variables?) 
 
+[//]: # (TODO: [Linkedin Error Handling](https://learn.microsoft.com/en-us/linkedin/shared/api-guide/concepts/error-handling)
+
 Install dependencies
 
     uv sync
