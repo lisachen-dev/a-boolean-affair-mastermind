@@ -1,4 +1,5 @@
 import logging
+from uuid import UUID
 
 from app.constants import (
 	ALLOW_REPEATS,
@@ -8,45 +9,83 @@ from app.constants import (
 	MAX_VALUE,
 	MIN_VALUE,
 )
-from app.models.game import GameCreate
+from app.models.game import Game, GameCreate
+from app.models.guess import Guess, GuessCreate
+from app.models.rules import Rules
 from app.repositories.game import GameStorage
+from app.repositories.player import PlayerStorage
 from app.services.random import RandomService
 
 logger = logging.getLogger(__name__)
 
 
-def resolve_rules(game_create: GameCreate) -> dict:
-	rules: dict[str, int | bool] = {
-		"code_length": game_create.code_length is not None or CODE_LENGTH,
-		"max_guesses": game_create.max_guesses is not None or MAX_GUESSES,
-		"max_value": game_create.max_value is not None or MAX_VALUE,
-		"min_value": game_create.min_value is not None or MIN_VALUE,
-		"allow_repeats": game_create.allow_repeats is not None or ALLOW_REPEATS,
-	}
-	return rules
+class GameService:
+	def __init__(
+		self,
+		game_storage: GameStorage,
+		random_service: RandomService,
+		player_storage: PlayerStorage,
+	):
+		self.game_storage = game_storage
+		self.random_service = random_service
+		self.player_storage = player_storage
 
+	@staticmethod
+	def _decide_default(value, fallback):
+		return value if value is not None else fallback
 
-def start_game(game_create: GameCreate):
-	# resolve rules
-	rules = resolve_rules(game_create=game_create)
+	def _resolve_rules(self, new_game: GameCreate) -> Rules:
+		return Rules(
+			code_length=self._decide_default(new_game.code_length, CODE_LENGTH),
+			max_guesses=self._decide_default(new_game.max_guesses, MAX_GUESSES),
+			min_value=self._decide_default(new_game.min_value, MIN_VALUE),
+			max_value=self._decide_default(new_game.max_value, MAX_VALUE),
+			allow_repeats=self._decide_default(new_game.allow_repeats, ALLOW_REPEATS),
+		)
 
-	# generate secret code
-	random_service = RandomService(external_code=IS_EXTERNAL_CODE)
-	secret_code = random_service.generate_secret_code(
-		code_length=game_create.code_length or CODE_LENGTH,
-		min_value=MIN_VALUE,
-		max_value=MAX_VALUE,
-		allow_repeats=ALLOW_REPEATS,
-	)
+	def start_game(self, game_create: GameCreate) -> Game:
+		# verify player exists
+		# rules
+		# secret
+		# game
+		# return game
+		pass
 
-	# generate storage instance
-	# create players
-	# create game
+	def get_game(self, game_id: UUID) -> Game:
+		# return games
+		pass
 
-	# game loop
-	# take turn
-	# create guess
-	# evaluate guess
-	# end game MAX_GUESSES reached or player guessed correctly
+	def list_games(self, player_id: UUID | None = None) -> list[Game]:
+		pass
 
-	pass
+	def create_guess(self, game_id: UUID, new_guess: GuessCreate):
+		# game
+		# validate guess
+		# guess
+		# apply the guess
+		# evaluate for status
+		# save the game
+		# return guess? the game?
+		pass
+
+	# validations
+
+	def _validate_guess_input(self, guess_value: str, rules: Rules) -> None:
+		pass
+
+	def _evaluate_guess(self, game: Game, guess_value: str) -> Guess:
+		# attempt number iterate
+		#
+		pass
+
+	def _update_statis_if_completed(selfself, game: Game, last_guess: Guess):
+		# WIN? LOSE?
+		pass
+
+	# mappings
+
+	def to_game_read(self, game: Game) -> GameRead:
+		pass
+
+	def to_guess_read(self, game: Game, guess: Guess) -> GuessRead:
+		pass
