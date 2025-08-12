@@ -6,12 +6,12 @@ from app.services.player import PlayerService
 from app.services.random import RandomService
 
 # repositories
-game_storage = GameStorage()
-player_storage = PlayerStorage()
+_game_storage = GameStorage()
+_player_storage = PlayerStorage()
 
 # services
 random_service = RandomService(external_code=IS_EXTERNAL_CODE)
-player_service = PlayerService(player_storage=player_storage)
+player_service = PlayerService(player_storage=_player_storage)
 game_service = GameService(
-	game_storage=game_storage, random_service=random_service, player_service=player_service
+	game_storage=_game_storage, random_service=random_service, player_service=player_service
 )
