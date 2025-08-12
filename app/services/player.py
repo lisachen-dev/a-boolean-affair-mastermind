@@ -24,6 +24,12 @@ class PlayerService:
 		logger.info("Founder player %s", player.name)
 		return player
 
+	def get_all(self) -> list[PlayerRead]:
+		players = self.player_storage.get_all()
+		read_players = [self.to_player_read(player) for player in players]
+		logger.info("Returning %d players", len(read_players))
+		return read_players
+
 	# validations
 	def validate_user_exists(self, player_id: UUID) -> None:
 		self.get(player_id)

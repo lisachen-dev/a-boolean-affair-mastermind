@@ -15,6 +15,9 @@ def start_game(new_game: GameCreate):
 
 	return game_service.to_game_read(game=game)
 
+@router.get("/", response_model=list[GameRead])
+def get_all_games():
+	return game_service.get_all_games()
 
 @router.get("/{game_id}", response_model=GameRead)
 def get_game(game_id: UUID) -> GameRead:

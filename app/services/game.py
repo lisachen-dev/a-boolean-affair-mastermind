@@ -61,8 +61,11 @@ class GameService:
 		self.player_service.validate_user_exists(player_id)
 		return self.game_storage.get_all_by_player(player_id)
 
-	def list_all_games(self):
-		return self.game_storage.get_all()
+	def get_all_games(self) -> list[GameRead]:
+		games = self.game_storage.get_all()
+		read_games = [self.to_game_read(game) for game in games]
+		logger.info("Returning %d games", len(read_games))
+		return read_games
 
 	def create_guess(self, game_id: UUID, new_guess: GuessCreate):
 		# game

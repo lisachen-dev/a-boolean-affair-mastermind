@@ -18,10 +18,9 @@ def create_player(new_player: PlayerCreate):
 @router.get("/{player_id}", response_model=PlayerRead)
 def get_player(player_id: str):
 	player = player_service.get(player_id=UUID(player_id))
-
 	return player_service.to_player_read(player)
 
 
-@router.get("/")
+@router.get("/", response_model=list(PlayerRead))
 def get_all_players():
-	pass
+	return player_service.get_all()
