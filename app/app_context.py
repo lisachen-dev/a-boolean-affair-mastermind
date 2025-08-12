@@ -10,7 +10,7 @@ _game_storage = GameStorage()
 _player_storage = PlayerStorage()
 
 # services
-random_service = RandomService(external_code=IS_EXTERNAL_CODE)
+random_service = RandomService(is_external_code=IS_EXTERNAL_CODE)
 player_service = PlayerService(player_storage=_player_storage)
 game_service = GameService(
 	game_storage=_game_storage, random_service=random_service, player_service=player_service

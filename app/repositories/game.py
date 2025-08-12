@@ -1,8 +1,7 @@
 import logging
 from uuid import UUID
 
-from app.models.game import Game, GameCreate
-from app.models.rules import Rules
+from app.models.game import Game
 
 logger = logging.getLogger(__name__)
 

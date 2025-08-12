@@ -13,29 +13,16 @@ logger = logging.getLogger(__name__)
 class RandomService:
 	RANDOM_BASE_URL = "https://www.random.org/integers/"
 
-	def __init__(self, external_code: bool = True):
-		if not isinstance(external_code, bool):
+	def __init__(self, is_external_code: bool = True):
+		if not isinstance(is_external_code, bool):
 			raise TypeError("external_code must be a boolean")
-		self.external_code = external_code
+		self.is_external_code = is_external_code
 
-	def generate_secret_code(
-		self,
-		code_length: int,
-		min_value: int,
-		max_value: int,
-		allow_repeats: bool,
-	) -> tuple[str, ...]:
+	def generate_secret_code(self, rules: Rules) -> tuple[str, ...]:
 		"""Generate a numeric secret code using either Python's secrets (internal) or random.org (external)"""
-		rules = Rules(
-			code_length=code_length,
-			min_value=min_value,
-			max_value=max_value,
-			allow_repeats=allow_repeats,
-		)
-
 		return (
 			self._generate_external_code(rules)
-			if self.external_code
+			if self.is_external_code
 			else self._generate_internal_code(rules)
 		)
 
@@ -50,9 +37,9 @@ class RandomService:
 
 		for value in secret:
 			if not value.isdigit():
-				raise ValueError(f"[SECRET] {value} is not a valid integer")
+				raise ValueError("[SECRET] %s is not a valid integer", value)
 			if not rules.min_value <= int(value) <= rules.max_value:
-				raise ValueError(f"[SECRET] {value} is out of range")
+				raise ValueError("[SECRET] %s is out of range", value)
 
 	@classmethod
 	def _generate_internal_code(cls, rules: Rules) -> tuple[str, ...]:
@@ -73,14 +60,12 @@ class RandomService:
 	@classmethod
 	def _generate_external_code(cls, rules: Rules) -> tuple[str, ...]:
 		"""Generate the secret code using Random.org"""
-		is_unique = "off" if rules.allow_repeats else "on"
 		payload = {
 			"num": rules.code_length,
 			"min": rules.min_value,
 			"max": rules.max_value,
 			"col": 1,
 			"base": 10,
-			"unique": is_unique,
 			"format": "plain",
 			"rnd": "new",
 		}
@@ -93,9 +78,6 @@ class RandomService:
 				response.reason,
 				response.url,
 			)
-
-			# if there's an error, returns HTTPError object
-			response.raise_for_status()
 
 		except Timeout:
 			raise HTTPException(status_code=500, detail="The request to random.org timed out")
