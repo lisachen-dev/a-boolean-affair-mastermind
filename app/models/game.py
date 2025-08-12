@@ -5,14 +5,6 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, PrivateAttr
 
-from app.constants import (
-	ALLOW_REPEATS,
-	CODE_LENGTH,
-	IS_EXTERNAL_CODE,
-	MAX_GUESSES,
-	MAX_VALUE,
-	MIN_VALUE,
-)
 from app.models.guess import Guess
 
 
