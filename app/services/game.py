@@ -1,13 +1,6 @@
 import logging
 from uuid import UUID
 
-from app.constants import (
-	ALLOW_REPEATS,
-	CODE_LENGTH,
-	MAX_GUESSES,
-	MAX_VALUE,
-	MIN_VALUE,
-)
 from app.models.game import Game, GameCreate, GameRead
 from app.models.guess import Guess, GuessCreate, GuessRead
 from app.models.rules import Rules
@@ -32,15 +25,6 @@ class GameService:
 	@staticmethod
 	def _decide_default(value, fallback):
 		return value if value is not None else fallback
-
-	def _resolve_rules(self, new_game: GameCreate) -> Rules:
-		return Rules(
-			code_length=self._decide_default(new_game.code_length, CODE_LENGTH),
-			max_guesses=self._decide_default(new_game.max_guesses, MAX_GUESSES),
-			min_value=self._decide_default(new_game.min_value, MIN_VALUE),
-			max_value=self._decide_default(new_game.max_value, MAX_VALUE),
-			allow_repeats=self._decide_default(new_game.allow_repeats, ALLOW_REPEATS),
-		)
 
 	def start_game(self, game_create: GameCreate) -> Game:
 		# verify player exists

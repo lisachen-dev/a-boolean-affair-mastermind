@@ -30,10 +30,6 @@ class PlayerService:
 		logger.info("Returning %d players", len(read_players))
 		return read_players
 
-	# validations
-	def validate_user_exists(self, player_id: UUID) -> None:
-		self.get(player_id)
-
 	# mappings
 	@staticmethod
 	def to_player_read(player: Player) -> PlayerRead:

@@ -11,11 +11,9 @@ class GameStorage:
 	def __init__(self) -> None:
 		self._games: dict[UUID, Game] = {}
 
-	def create(self, game_create: GameCreate, rules: Rules) -> Game:
-		game = Game(player_id=game_create.player_id, **rules.model_dump())
-
+	def create(self, game: Game) -> Game:
 		self._games[game.id] = game
-		logger.info(f"Game created successfully! id={game.id}")
+		logger.info("Game created successfully! id=%s", game.id)
 		return game
 
 	def get(self, game_id: UUID) -> Game:
