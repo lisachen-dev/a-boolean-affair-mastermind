@@ -4,16 +4,16 @@ from uuid import UUID
 from app.constants import (
 	ALLOW_REPEATS,
 	CODE_LENGTH,
-	IS_EXTERNAL_CODE,
 	MAX_GUESSES,
 	MAX_VALUE,
 	MIN_VALUE,
 )
-from app.models.game import Game, GameCreate
-from app.models.guess import Guess, GuessCreate
+from app.models.game import Game, GameCreate, GameRead
+from app.models.guess import Guess, GuessCreate, GuessRead
 from app.models.rules import Rules
 from app.repositories.game import GameStorage
 from app.repositories.player import PlayerStorage
+from app.services.player import PlayerService
 from app.services.random import RandomService
 
 logger = logging.getLogger(__name__)
@@ -24,11 +24,11 @@ class GameService:
 		self,
 		game_storage: GameStorage,
 		random_service: RandomService,
-		player_storage: PlayerStorage,
+		player_service: PlayerService,
 	):
 		self.game_storage = game_storage
 		self.random_service = random_service
-		self.player_storage = player_storage
+		self.player_service = player_service
 
 	@staticmethod
 	def _decide_default(value, fallback):
@@ -45,6 +45,7 @@ class GameService:
 
 	def start_game(self, game_create: GameCreate) -> Game:
 		# verify player exists
+
 		# rules
 		# secret
 		# game
@@ -52,11 +53,13 @@ class GameService:
 		pass
 
 	def get_game(self, game_id: UUID) -> Game:
-		# return games
-		pass
+		return self.game_storage.get(game_id)
 
-	def list_games(self, player_id: UUID | None = None) -> list[Game]:
-		pass
+	def list_games_by_player(self, player_id: UUID | None = None) -> list[Game]:
+		return self.game_storage.get_all_by_player(player_id)
+
+	def list_all_games(self):
+		return self.game_storage.get_all()
 
 	def create_guess(self, game_id: UUID, new_guess: GuessCreate):
 		# game
@@ -83,9 +86,10 @@ class GameService:
 		pass
 
 	# mappings
+	@staticmethod
+	def to_game_read(game: Game) -> GameRead:
+		return GameRead(**game.model_dump())
 
-	def to_game_read(self, game: Game) -> GameRead:
-		pass
-
-	def to_guess_read(self, game: Game, guess: Guess) -> GuessRead:
+	@staticmethod
+	def to_guess_read(self, game_id: UUID, guess: Guess) -> GuessRead:
 		pass

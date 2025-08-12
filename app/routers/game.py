@@ -13,12 +13,12 @@ router = APIRouter(prefix="/games", tags=["games"])
 def start_game(new_game: GameCreate):
 	game = game_service.start_game(new_game)
 
-	return GameRead(**game.model_dump())
+	return game_service.to_game_read(game=game)
 
 
-@router.get("/{game_id}")
-def get_game(game_id: UUID):
-	pass
+@router.get("/{game_id}", response_model=GameRead)
+def get_game(game_id: UUID) -> GameRead:
+	return game_service.get_game(game_id)
 
 
 # guess routes

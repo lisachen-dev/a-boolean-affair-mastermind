@@ -9,7 +9,7 @@ class PlayerBase(BaseModel):
 
 
 class PlayerCreate(PlayerBase):
-	pass  # no extra fields for creation right now
+	pass
 
 
 class PlayerRead(PlayerBase):
