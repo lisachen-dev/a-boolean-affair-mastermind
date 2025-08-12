@@ -21,6 +21,6 @@ def get_player(player_id: str):
 	return player_service.to_player_read(player)
 
 
-@router.get("/", response_model=list(PlayerRead))
+@router.get("/", response_model=list[PlayerRead])
 def get_all_players():
 	return player_service.get_all()
