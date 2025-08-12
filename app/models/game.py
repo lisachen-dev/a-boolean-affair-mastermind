@@ -33,6 +33,7 @@ class GameCreate(BaseModel):
 
 
 class Game(BaseModel):
+	_secret: tuple[str, ...] = PrivateAttr(default=())
 	id: UUID = Field(default_factory=uuid4)
 	status: GameStatus = GameStatus.IN_PROGRESS
 	player_id: UUID
