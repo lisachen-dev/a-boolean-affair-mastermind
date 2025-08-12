@@ -27,13 +27,15 @@ class GameService:
 		return value if value is not None else fallback
 
 	def start_game(self, game_create: GameCreate) -> Game:
-		# verify player exists
+		logger.debug("Starting game: %s", game_create)
 
-		# rules
-		# secret
-		# game
-		# return game
-		pass
+		self.player_service.get(game_create.player_id)
+		rules = Rules(**game_create.model_dump(exclude_none=True))
+		secret = self.random_service.generate_secret_code(rules)
+
+		new_game = Game(player_id=game_create.player_id, **rules.model_dump())
+		new_game._secret = secret
+		return self.game_storage.create(new_game)
 
 	def get_game(self, game_id: UUID) -> Game:
 		return self.game_storage.get(game_id)
@@ -42,7 +44,7 @@ class GameService:
 		if player_id is None:
 			raise ValueError("player_id is required")
 
-		self.player_service.validate_user_exists(player_id)
+		self.player_service.get(player_id)
 		return self.game_storage.get_all_by_player(player_id)
 
 	def get_all_games(self) -> list[GameRead]:
