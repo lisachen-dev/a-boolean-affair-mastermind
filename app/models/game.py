@@ -8,10 +8,10 @@ from pydantic import BaseModel, Field
 from app.constants import (
 	ALLOW_REPEATS,
 	CODE_LENGTH,
+	IS_EXTERNAL_CODE,
 	MAX_GUESSES,
 	MAX_VALUE,
 	MIN_VALUE,
-	IS_EXTERNAL_CODE,
 )
 from app.models.guess import Guess
 
@@ -29,7 +29,7 @@ class GameCreate(BaseModel):
 	min_value: Optional[int] = None
 	max_value: Optional[int] = None
 	allow_repeats: Optional[bool] = None
-	random_external: Optional[bool] = None
+	is_external_code: Optional[bool] = None
 
 
 class Game(BaseModel):
@@ -57,7 +57,7 @@ class Game(BaseModel):
 	allow_repeats: bool = Field(
 		default=ALLOW_REPEATS, description="allows non-unique values"
 	)
-	random_external: bool = Field(
+	is_external_code: bool = Field(
 		default=IS_EXTERNAL_CODE,
 		description="toggle between using internal and external code generation",
 	)
