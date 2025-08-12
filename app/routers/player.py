@@ -16,8 +16,8 @@ def create_player(new_player: PlayerCreate):
 
 
 @router.get("/{player_id}", response_model=PlayerRead)
-def get_player(player_id: str):
-	player = player_service.get(player_id=UUID(player_id))
+def get_player(player_id: UUID):
+	player = player_service.get(player_id=player_id)
 	return player_service.to_player_read(player)
 
 
