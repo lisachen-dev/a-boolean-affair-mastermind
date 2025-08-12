@@ -3,7 +3,6 @@ from uuid import UUID
 
 from app.models.player import Player, PlayerCreate, PlayerRead
 from app.repositories.player import PlayerStorage
-from app.services.app_context import player_storage
 
 logger = logging.getLogger(__name__)
 

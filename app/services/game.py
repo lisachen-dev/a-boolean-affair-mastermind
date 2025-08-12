@@ -12,7 +12,6 @@ from app.models.game import Game, GameCreate, GameRead
 from app.models.guess import Guess, GuessCreate, GuessRead
 from app.models.rules import Rules
 from app.repositories.game import GameStorage
-from app.repositories.player import PlayerStorage
 from app.services.player import PlayerService
 from app.services.random import RandomService
 
