@@ -54,7 +54,11 @@ class GameService:
 	def get_game(self, game_id: UUID) -> Game:
 		return self.game_storage.get(game_id)
 
-	def list_games_by_player(self, player_id: UUID | None = None) -> list[Game]:
+	def list_games_by_player(self, player_id: UUID) -> list[Game]:
+		if player_id is None:
+			raise ValueError("player_id is required")
+
+		self.player_service.validate_user_exists(player_id)
 		return self.game_storage.get_all_by_player(player_id)
 
 	def list_all_games(self):
@@ -80,7 +84,7 @@ class GameService:
 		#
 		pass
 
-	def _update_statis_if_completed(selfself, game: Game, last_guess: Guess):
+	def _update_status_if_completed(selfself, game: Game, last_guess: Guess):
 		# WIN? LOSE?
 		pass
 
@@ -90,5 +94,5 @@ class GameService:
 		return GameRead(**game.model_dump())
 
 	@staticmethod
-	def to_guess_read(self, game_id: UUID, guess: Guess) -> GuessRead:
+	def to_guess_read(game_id: UUID, guess: Guess) -> GuessRead:
 		pass

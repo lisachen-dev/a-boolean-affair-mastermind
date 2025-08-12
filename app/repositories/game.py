@@ -29,8 +29,6 @@ class GameStorage:
 		return list(self._games.values())
 
 	def get_all_by_player(self, player_id: UUID | None) -> list[Game]:
-		if player_id is None:
-			raise ValueError("player_id is required")
 
 		filtered_games_by_player = []
 		for game in self._games.values():
