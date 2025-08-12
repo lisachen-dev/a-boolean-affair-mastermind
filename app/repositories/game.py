@@ -1,40 +1,26 @@
 import logging
+from uuid import UUID
 
-from app.constants import (
-	ALLOW_REPEATS,
-	CODE_LENGTH,
-	IS_EXTERNAL_CODE,
-	MAX_GUESSES,
-	MAX_VALUE,
-	MIN_VALUE,
-)
 from app.models.game import Game, GameCreate
+from app.models.rules import Rules
 
 logger = logging.getLogger(__name__)
 
 
 class GameStorage:
 	def __init__(self) -> None:
-		self.games: dict[str, Game] = {}
+		self.games: dict[UUID, Game] = {}
 
-	def create(
-		self, game_create: GameCreate, secret: tuple[str, ...], rules: dict
-	) -> Game:
-		game = Game(
-			player_id=game_create.player_id,
-			secret=secret,
-			code_length=game_create.code_length,
-			max_guesses=game_create.max_guesses,
-			max_value=game_create.max_value,
-			min_value=game_create.min_value,
-			allow_repeats=game_create.allow_repeats,
-		)
+	def create(self, game_create: GameCreate, rules: Rules) -> Game:
+		game = Game(player_id=game_create.player_id, **rules.model_dump())
 
-		self.games[str(game.id)] = game
-		logger.info("Game created successfully!")
+		self.games[game.id] = game
+		logger.info(f"Game created successfully! id={game.id}")
 		return game
 
 	def get(self, game_id: str) -> Game:
+		game_id = UUID(game_id)
+
 		if game_id not in self.games:
 			raise KeyError("Game is not found")
 
