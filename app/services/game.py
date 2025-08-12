@@ -84,7 +84,7 @@ class GameService:
 		#
 		pass
 
-	def _update_status_if_completed(selfself, game: Game, last_guess: Guess):
+	def _update_status_if_completed(self, game: Game, last_guess: Guess):
 		# WIN? LOSE?
 		pass
 

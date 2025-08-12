@@ -2,9 +2,9 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
+from app.app_context import game_service
 from app.models.game import GameCreate, GameRead
 from app.models.guess import GuessCreate
-from app.services.app_context import game_service
 
 router = APIRouter(prefix="/games", tags=["games"])
 
