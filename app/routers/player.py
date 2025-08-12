@@ -2,8 +2,8 @@ from uuid import UUID
 
 from fastapi import APIRouter
 
+from app.app_context import player_service
 from app.models.player import PlayerCreate, PlayerRead
-from app.services.app_context import player_service
 
 router = APIRouter(prefix="/players", tags=["players"])
 
@@ -16,8 +16,8 @@ def create_player(new_player: PlayerCreate):
 
 
 @router.get("/{player_id}", response_model=PlayerRead)
-def get_player(player_id: UUID):
-	player = player_service.get(player_id=player_id)
+def get_player(player_id: str):
+	player = player_service.get(player_id=UUID(player_id))
 
 	return player_service.to_player_read(player)
 

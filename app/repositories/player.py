@@ -11,12 +11,8 @@ class PlayerStorage:
 		self._players: dict[UUID, Player] = {}
 
 	def create(self, player_create: PlayerCreate) -> Player:
-		if player_create.id not in self._players:
-			raise KeyError("Player does not exist")
-
 		player = Player(name=player_create.name)
 		self._players[player.id] = player
-
 		return player
 
 	def get(self, player_id: UUID) -> Player:

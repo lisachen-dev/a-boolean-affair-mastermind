@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 logging.basicConfig(
 	level=getattr(logging, LOG_LEVEL, logging.INFO),
 	format="%(asctime)s [%(levelname)s - %(name)s] --- %(message)s",
+	force=True,
 )
 logger.info("You have now started A Boolean Affair!")
 
