@@ -94,14 +94,37 @@ class RandomService:
 				detail="An unexpected error occurred while connecting with random.org",
 			)
 
-		secret_list = []
+		# convert the response text to a usable list obj
+		lines = []
 		for line in response.text.splitlines():
 			trimmed_line = line.strip()
-
 			if trimmed_line:
-				secret_list.append(trimmed_line)
+				lines.append(trimmed_line)
 
-		secret = tuple(secret_list)
+		# remove duplicates if not allowed and retry until we get enough unique values
+		if not rules.allow_repeats:
+			tracking_set = set()
+			unique_values = []
+			for value in lines:
+				if value not in tracking_set:
+					tracking_set.add(value)
+				if len(unique_values) == rules.code_length:
+					break
+
+			# if we didn't get enough unique values, fallback to the internal method.
+			if len(unique_values) < rules.code_length:
+				return cls._generate_internal_code(rules)
+
+			lines = unique_values
+
+		# validate numbers and make sure they're within range and all digits
+		for value in lines:
+			if not value.isdigit():
+				raise ValueError("random.org did not return an integer: %s", value)
+			if not (rules.min_value <= int(value) <= rules.max_value):
+				raise ValueError("random.org value is out of range: %s", value)
+
+		secret = tuple(lines)
 		cls._validate_secret(secret, rules)
 		logger.info("The secret code was generated using random.org!")
 		return secret

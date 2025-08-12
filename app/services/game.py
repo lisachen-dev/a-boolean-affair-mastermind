@@ -78,7 +78,23 @@ class GameService:
 	# mappings
 	@staticmethod
 	def to_game_read(game: Game) -> GameRead:
-		return GameRead(**game.model_dump())
+		return GameRead(
+			**game.model_dump(
+				include={
+					"id",
+					"status",
+					"player_id",
+					"guesses",
+					"finished_at",
+					"code_length",
+					"max_guesses",
+					"min_value",
+					"max_value",
+					"allow_repeats",
+					"created_at",
+				}
+			)
+		)
 
 	@staticmethod
 	def to_guess_read(game_id: UUID, guess: Guess) -> GuessRead:
