@@ -4,13 +4,23 @@ from uuid import UUID, uuid4
 from pydantic import BaseModel, Field
 
 
-# TODO reminder to write validation in server/ (guess_value / attempt_num etc)
+# TODO reminder to write validation in server/ (remaining attempts calculate)
 class GuessBase(BaseModel):
 	guess_value: str
 
 
 class GuessCreate(GuessBase):
+	# reminder: does not need id you get game_id from router path
+	pass
+
+
+class GuessRead(GuessBase):
+	id: UUID
 	game_id: UUID
+	attempt_number: int
+	exact_matches: int
+	partial_matches: int
+	created_at: datetime
 
 
 class Guess(GuessBase):
@@ -18,9 +28,9 @@ class Guess(GuessBase):
 	game_id: UUID
 
 	# server-only fields
-	attempt_no: int
 	exact_matches: int = Field(default=0)
 	partial_matches: int = Field(default=0)
+	attempt_number: int
 	created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 	# TODO Plug for future multiplayer consideration
