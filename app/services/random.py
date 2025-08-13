@@ -6,6 +6,7 @@ from fastapi import HTTPException
 from requests.exceptions import ConnectionError, HTTPError, RequestException, Timeout
 
 from app.models.rules import Rules
+from app.utils.validators import validate_code_sequence
 
 logger = logging.getLogger(__name__)
 
@@ -20,26 +21,30 @@ class RandomService:
 
 	def generate_secret_code(self, rules: Rules) -> tuple[str, ...]:
 		"""Generate a numeric secret code using either Python's secrets (internal) or random.org (external)"""
-		return (
+
+		# decide if secret_code is generated from random.org or Python's internal tools
+		secret_code = (
 			self._generate_external_code(rules)
 			if self.is_external_code
 			else self._generate_internal_code(rules)
 		)
+		validate_code_sequence(
+			values=secret_code,
+			code_length=rules.code_length,
+			min_value=rules.min_value,
+			max_value=rules.max_value,
+			allow_repeats=rules.allow_repeats,
+			label="[SECRET]",
+		)
 
-	@staticmethod
-	def _validate_secret(secret: tuple[str, ...], rules: Rules) -> None:
-		"""Validate that the secret code falls within rule parameters"""
-		if len(secret) != rules.code_length:
-			raise ValueError("Secret length is invalid code length")
+		# logging successful generation of secret code
+		logger.info(
+			"The secret code was generated using random.org!"
+		) if self.is_external_code else logger.info(
+			"The secret code was generated using Python's secrets module!"
+		)
 
-		if not rules.allow_repeats and len(set(secret)) != rules.code_length:
-			raise ValueError("Duplicates are found, but allow_repeats is set to False")
-
-		for value in secret:
-			if not value.isdigit():
-				raise ValueError("[SECRET] %s is not a valid integer", value)
-			if not rules.min_value <= int(value) <= rules.max_value:
-				raise ValueError("[SECRET] %s is out of range", value)
+		return secret_code
 
 	@classmethod
 	def _generate_internal_code(cls, rules: Rules) -> tuple[str, ...]:
@@ -53,8 +58,6 @@ class RandomService:
 			values = rand_num_generator.sample(pool, rules.code_length)
 
 		secret = tuple(str(value) for value in values)
-		cls._validate_secret(secret, rules)
-		logger.info("The secret code was generated using Python's secrets module!")
 		return secret
 
 	@classmethod
@@ -117,14 +120,4 @@ class RandomService:
 
 			lines = unique_values
 
-		# validate numbers and make sure they're within range and all digits
-		for value in lines:
-			if not value.isdigit():
-				raise ValueError("random.org did not return an integer: %s", value)
-			if not (rules.min_value <= int(value) <= rules.max_value):
-				raise ValueError("random.org value is out of range: %s", value)
-
-		secret = tuple(lines)
-		cls._validate_secret(secret, rules)
-		logger.info("The secret code was generated using random.org!")
-		return secret
+		return tuple(lines)

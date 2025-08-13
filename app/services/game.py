@@ -63,9 +63,7 @@ class GameService:
 		# return guess? the game?
 		pass
 
-	# validations
-
-	def _validate_guess_input(self, guess_value: str, rules: Rules) -> None:
+	def get_all_guesses(self) -> list[Guess]:
 		pass
 
 	def _evaluate_guess(self, game: Game, guess_value: str) -> Guess:
