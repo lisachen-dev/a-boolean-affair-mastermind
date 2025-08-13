@@ -5,7 +5,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, PrivateAttr
 
-from app.models.guess import Guess
+from app.models.guess import Guess, GuessLastResult
 
 
 class GameStatus(str, enum.Enum):
@@ -16,16 +16,18 @@ class GameStatus(str, enum.Enum):
 
 class GameRead(BaseModel):
 	id: UUID
-	status: GameStatus
 	player_id: UUID
-	guesses: list[Guess]
-	finished_at: datetime | None = None
+	status: GameStatus
+	attempts_made: int  # calculate this, len(guesses?)
+	attempts_left: int  # calculate this, max guesses - attempts made?
 	code_length: int
 	max_guesses: int
 	min_value: int
 	max_value: int
 	allow_repeats: bool
+	finished_at: datetime | None = None
 	created_at: datetime
+	last_result: GuessLastResult | None = None
 
 
 class GameCreate(BaseModel):
