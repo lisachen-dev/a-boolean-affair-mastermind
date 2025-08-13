@@ -1,5 +1,4 @@
 import logging
-from os.path import exists
 from uuid import UUID
 
 from app.models.game import Game

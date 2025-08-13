@@ -1,7 +1,7 @@
 import logging
 from uuid import UUID
 
-from app.models.player import Player, PlayerCreate, PlayerRead
+from app.models.player import Player, PlayerCreate
 from app.repositories.player import PlayerStorage
 
 logger = logging.getLogger(__name__)

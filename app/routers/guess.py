@@ -1,4 +1,4 @@
-from http.client import HTTPException
+from fastapi import HTTPException
 from typing import Optional
 from uuid import UUID
 
