@@ -1,7 +1,10 @@
 from uuid import UUID
+
 from fastapi import APIRouter
+
 from app.models.guess import GuessCreate
-router = APIRouter(prefix="/games", tags=["guesses"])
+
+router = APIRouter(prefix="/games", tags=["Guesses"])
 
 
 @router.post("/{game_id}/guesses")

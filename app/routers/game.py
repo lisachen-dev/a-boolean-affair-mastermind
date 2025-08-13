@@ -8,7 +8,7 @@ from app.models.game import GameCreate, GameRead
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/games", tags=["games"])
+router = APIRouter(prefix="/games", tags=["Games"])
 
 
 @router.post("/", response_model=GameRead)

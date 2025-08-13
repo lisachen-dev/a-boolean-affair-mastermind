@@ -7,7 +7,7 @@ from app.app_context import player_service
 from app.models.player import PlayerCreate, PlayerRead
 
 logger = logging.getLogger(__name__)
-router = APIRouter(prefix="/players", tags=["players"])
+router = APIRouter(prefix="/players", tags=["Players"])
 
 
 @router.post("/", response_model=PlayerRead)
