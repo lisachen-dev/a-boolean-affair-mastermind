@@ -1,6 +1,3 @@
-from app.models.rules import Rules
-
-
 def validate_code_sequence(
 	values: list[str] | tuple[str, ...],
 	code_length: int,

@@ -7,8 +7,19 @@ from app.models.rules import Rules
 from app.repositories.game import GameStorage
 from app.services.player import PlayerService
 from app.services.random import RandomService
+from app.utils.validators import validate_code_sequence
 
 logger = logging.getLogger(__name__)
+
+"""
+
+TODO:
+attempts_made == max_guesses - attempts_made or 0
+if status not IN_PROGRESS, finished_at should be set
+if status == WON, the last guess should have exact_matches exact_matches == code.length
+reject new guesses after the status is not IN_PROGRESS
+
+"""
 
 
 class GameService:
