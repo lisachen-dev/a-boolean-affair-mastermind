@@ -13,12 +13,20 @@ class PlayerStorage:
 	def create(self, player_create: PlayerCreate) -> Player:
 		player = Player(name=player_create.name)
 		self._players[player.id] = player
+		logger.info("Player created with id=%s, name=%s", player.id, player.name)
 		return player
 
 	def get(self, player_id: UUID) -> Player:
-		if player_id not in self._players:
-			raise KeyError("Player does not exist")
+		player = self._players.get(player_id)
+		if player is None:
+			raise KeyError("Player not found")
 		return self._players[player_id]
 
 	def get_all(self) -> list[Player]:
 		return list(self._players.values())
+
+	def exists(self, player_id: UUID) -> bool:
+		return player_id in self._players
+
+	def clear(self) -> None:
+		self._players.clear()

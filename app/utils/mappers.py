@@ -1,5 +1,10 @@
 from app.models.game import Game, GameRead
 from app.models.guess import Guess, GuessLastResult, GuessRead
+from app.models.player import Player, PlayerRead
+
+
+def to_player_read(player: Player) -> PlayerRead:
+	return PlayerRead(**player.model_dump())
 
 
 def to_game_read(game: Game) -> GameRead:

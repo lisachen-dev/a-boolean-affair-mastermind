@@ -1,4 +1,5 @@
 import logging
+from os.path import exists
 from uuid import UUID
 
 from app.models.game import Game
@@ -26,15 +27,20 @@ class GameStorage:
 		return list(self._games.values())
 
 	def get_all_by_player(self, player_id: UUID | None) -> list[Game]:
-		filtered_games_by_player = []
-		for game in self._games.values():
-			if game.player_id == player_id:
-				filtered_games_by_player.append(game)
-		return filtered_games_by_player
+		if player_id is None:
+			logger.debug("Player not found.")
+			return self.get_all()
+		return [game for game in self._games.values() if game.player_id == player_id]
 
 	def update(self, game: Game) -> Game:
-		if game not in self._games:
+		if game.id not in self._games:
 			raise KeyError("Game not found")
 		self._games[game.id] = game
 		logger.info("Game updated successfully! id=%s", game.id)
 		return game
+
+	def exists(self, game_id: UUID) -> bool:
+		return game_id in self._games
+
+	def clear(self) -> None:
+		self._games.clear()

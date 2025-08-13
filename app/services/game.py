@@ -2,24 +2,15 @@ import logging
 from datetime import datetime, timezone
 from uuid import UUID
 
-from app.models.game import Game, GameCreate, GameRead, GameStatus
-from app.models.guess import Guess, GuessCreate, GuessRead
+from app.models.game import Game, GameCreate, GameStatus
+from app.models.guess import Guess
 from app.models.rules import Rules
 from app.repositories.game import GameStorage
 from app.services.player import PlayerService
 from app.services.random import RandomService
-from app.utils.mappers import to_game_read, to_guess_read
 from app.utils.validators import validate_code_sequence
 
 logger = logging.getLogger(__name__)
-
-"""
-TODO:
-attempts_made == max_guesses - attempts_made or 0
-if status not IN_PROGRESS, finished_at should be set
-if status == WON, the last guess should have exact_matches exact_matches == code.length
-reject new guesses after the status is not IN_PROGRESS
-"""
 
 
 class GameService:
@@ -59,20 +50,21 @@ class GameService:
 		self.player_service.get(player_id)
 		return self.game_storage.get_all_by_player(player_id)
 
-	def get_all_games(self) -> list[GameRead]:
+	def get_all_games(self) -> list[Game]:
 		games = self.game_storage.get_all()
-		read_games = [to_game_read(game) for game in games]
-		logger.info("Returning %d games", len(read_games))
-		return read_games
+		logger.debug("Returning %d games", len(games))
+		return games
 
 	# GUESS
 
-	def submit_guess(self, game_id: UUID, guess_value: list[str]) -> GuessRead:
+	def submit_guess(self, game_id: UUID, guess_value: list[str]) -> Guess:
 		"""submit guess and return the read-friendly GuessRead"""
 
 		game = self.get_game(game_id)
 		if game.status != GameStatus.IN_PROGRESS:
 			raise ValueError("This game is closed! Please start a new game.")
+		if len(game.guesses) >= game.max_guesses:
+			raise PermissionError("No attempts left")
 
 		# validate guess input against game rules
 		validate_code_sequence(
@@ -84,14 +76,13 @@ class GameService:
 			label="[GUESS]",
 		)
 
-		create_model = GuessCreate(guess_value=guess_value)
 		exact_matches, partial_matches = self._score_guess(
 			secret=game._secret, guess_value=guess_value
 		)
 
 		guess = Guess(
 			game_id=game.id,
-			guess_value=create_model.guess_value,
+			guess_value=guess_value,
 			exact_matches=exact_matches,
 			partial_matches=partial_matches,
 			created_at=self._utc_now(),
@@ -102,18 +93,19 @@ class GameService:
 		self._update_status_if_completed(game=game, last_guess=guess)
 		self.game_storage.update(game)
 
-		logger.info("Guess has been recorded: %s", guess.guess_value)
-		return to_guess_read(guess)
+		logger.info(
+			"Guess has been recorded: game=%s attempts=%s %s",
+			game.id,
+			len(game.guesses),
+			game.max_guesses,
+		)
+		return guess
 
 	def get_all_guesses(self, game_id: UUID) -> list[Guess]:
 		game_obj = self.get_game(game_id=game_id)
 		return game_obj.guesses
 
 	# HELPERS
-
-	@staticmethod
-	def create_guess(guess_value: list[str]) -> GuessCreate:
-		return GuessCreate(guess_value=guess_value)
 
 	@staticmethod
 	def _score_guess(secret: tuple[str, ...], guess_value: list[str]) -> tuple[int, int]:
@@ -143,7 +135,7 @@ class GameService:
 
 		return exact_match_count, partial_match_count
 
-	def _update_status_if_completed(self, game: Game, last_guess: Guess):
+	def _update_status_if_completed(self, game: Game, last_guess: Guess) -> None:
 		if last_guess.exact_matches == game.code_length:
 			game.status = GameStatus.WON
 			game.finished_at = self._utc_now()
@@ -152,5 +144,5 @@ class GameService:
 			game.finished_at = self._utc_now()
 
 	@staticmethod
-	def _utc_now():
+	def _utc_now() -> datetime:
 		return datetime.now(timezone.utc)
