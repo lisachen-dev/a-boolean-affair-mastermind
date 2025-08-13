@@ -1,13 +1,13 @@
 from app.models.game import Game, GameRead
 from app.models.guess import Guess, GuessLastResult, GuessRead
-from app.services.game import GameService
 
 
 def to_game_read(game: Game) -> GameRead:
 	attempts_made = len(game.guesses)
 	attempts_left = max(game.max_guesses - attempts_made, 0)
 
-	last_guess_result = to_guess_last_result(guess=game.guesses[len(game.guesses) - 1])
+	last_guess = game.guesses[-1] if game.guesses else None
+	last_guess_result = to_guess_last_result(last_guess) if last_guess else None
 
 	return GameRead(
 		**game.model_dump(
