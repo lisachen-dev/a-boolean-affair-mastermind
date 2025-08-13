@@ -3,9 +3,7 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-# TODO Plug for future multiplayer consideration
-# TODO reminder to write validation in server/ (remaining attempts calculate)
-
+# Guess models are intended to be immutable once created (so user can't go back and change it)
 
 class GuessCreate(BaseModel):
 	guess_value: list[str]
