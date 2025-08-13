@@ -4,7 +4,7 @@ authors = [
     {name = "Lisa Chen", email = "lisa.hl.chen@gmail.com"}
 ]
 version = "0.1.0"
-description = "Add your description here" # TODO fill out description
+description = "A FastAPI-based Mastermind-style guessing game"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
