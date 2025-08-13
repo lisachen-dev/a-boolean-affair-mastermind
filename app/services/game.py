@@ -41,7 +41,13 @@ class GameService:
 		logger.debug("Starting game: %s", game_create)
 
 		self.player_service.get(game_create.player_id)
-		rules = Rules(**game_create.model_dump(exclude_none=True))
+
+		rules = Rules(
+			**game_create.model_dump(
+				include={"code_length", "max_guesses", "min_value", "max_value", "allow_repeats"},
+				exclude_none=True,
+			)
+		)
 		secret = self.random_service.generate_secret_code(rules)
 
 		new_game = Game(player_id=game_create.player_id, **rules.model_dump())
