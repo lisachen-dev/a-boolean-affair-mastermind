@@ -5,26 +5,30 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from starlette.responses import RedirectResponse
 
-from app.routers import game, player
+from app.routers import game, guess, player
 
-# logger config
+# --- env + logging ---
 load_dotenv()
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
-logger = logging.getLogger(__name__)
+
 logging.basicConfig(
 	level=getattr(logging, LOG_LEVEL, logging.INFO),
 	format="%(asctime)s [%(levelname)s - %(name)s] --- %(message)s",
 	force=True,
 )
+logger = logging.getLogger(__name__)
 logger.info("You have now started A Boolean Affair!")
 
-# route access
+# --- app setup ---
 app = FastAPI(title="A Boolean Affair")
+
+# --- router access ---
 app.include_router(game.router)
 app.include_router(player.router)
+app.include_router(guess.router)
 
 
-# Root Route redirects to Swagger docs
+# --- root redirect to Swagger ---
 @app.get("/", include_in_schema=False)
 async def redirect_to_docs():
 	logger.info("Redirecting to Swagger UI")
