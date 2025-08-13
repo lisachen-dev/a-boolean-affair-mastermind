@@ -33,6 +33,8 @@ class GameService:
 		self.random_service = random_service
 		self.player_service = player_service
 
+
+	# GAME
 	@staticmethod
 	def _decide_default(value, fallback):
 		return value if value is not None else fallback
@@ -57,10 +59,7 @@ class GameService:
 	def get_game(self, game_id: UUID) -> Game:
 		return self.game_storage.get(game_id)
 
-	def list_games_by_player(self, player_id: UUID) -> list[Game]:
-		if player_id is None:
-			raise ValueError("player_id is required")
-
+	def get_all_games_by_player(self, player_id: UUID) -> list[Game]:
 		self.player_service.get(player_id)
 		return self.game_storage.get_all_by_player(player_id)
 
@@ -74,6 +73,8 @@ class GameService:
 		# game
 		# validate guess
 		# guess
+	# GUESS
+
 		# apply the guess
 		# evaluate for status
 		# save the game
@@ -83,9 +84,28 @@ class GameService:
 	def get_all_guesses(self) -> list[Guess]:
 		pass
 
-	def _evaluate_guess(self, game: Game, guess_value: str) -> Guess:
-		# attempt number iterate
-		#
+	# helpers
+
+	def _score_guess(self, secret: tuple[str,...], guess_value: list[str]) -> Guess:
+		"""
+		game: attempts_made (len(guesses)) attempts_left
+		guess: attempt_number, exact_matches, Partial_matches
+		evaluate secret compared to guess_value:
+			number in position (exact)
+			number in secret, but not in right position (partial)
+
+			secret_leftover = []
+			guess_leftover = []
+
+			loop through and match
+				* if there is an exact match at the corresponding i, increment exact matches and move on
+				* if there isn't, store both in corresponding lists and increment partial match
+
+			for remaining lists, if any guesses are in the secret list, then increment partial match
+
+			create a dictionary to hold remaining values in secret on a count
+			compare guess_value by looping and decrement the counts for secrets, but increase the partial amount.
+		"""
 		pass
 
 	def _update_status_if_completed(self, game: Game, last_guess: Guess):
