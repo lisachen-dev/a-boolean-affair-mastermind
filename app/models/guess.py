@@ -12,7 +12,6 @@ class GuessCreate(BaseModel):
 
 class GuessLastResult(BaseModel):
 	guess_value: list[str]
-	attempt_number: int
 	exact_matches: int
 	partial_matches: int
 	created_at: datetime
