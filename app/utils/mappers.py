@@ -1,5 +1,4 @@
 from app.models.game import Game, GameRead
-from app.models.guess import Guess, GuessLastResult, GuessRead
 from app.models.player import Player, PlayerRead
 
 

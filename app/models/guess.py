@@ -35,9 +35,5 @@ class GuessLastResult(BaseModel):
 	partial_matches: int
 
 
-class GuessRead(Guess):
-	pass
-
-
 class GuessCreate(BaseModel):
 	guess_value: list[str]
