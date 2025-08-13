@@ -3,18 +3,9 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-# Guess models are intended to be immutable once created (so user can't go back and change it)
-
-
-class GuessCreate(BaseModel):
-	guess_value: list[str]
-
-
-class GuessLastResult(BaseModel):
-	guess_value: list[str]
-	exact_matches: int
-	partial_matches: int
-	created_at: datetime
+"""
+DOMAIN (state and logic)
+"""
 
 
 class Guess(BaseModel):
@@ -25,6 +16,28 @@ class Guess(BaseModel):
 	partial_matches: int = Field(default=0)
 	created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
+	def to_last_result(self) -> "GuessLastResult":
+		return GuessLastResult(
+			guess_value=self.guess_value,
+			exact_matches=self.exact_matches,
+			partial_matches=self.partial_matches,
+		)
+
+
+"""
+SCHEMAS (request/response)
+"""
+
+
+class GuessLastResult(BaseModel):
+	guess_value: list[str]
+	exact_matches: int
+	partial_matches: int
+
 
 class GuessRead(Guess):
 	pass
+
+
+class GuessCreate(BaseModel):
+	guess_value: list[str]

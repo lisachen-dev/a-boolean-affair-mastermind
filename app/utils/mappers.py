@@ -12,7 +12,7 @@ def to_game_read(game: Game) -> GameRead:
 	attempts_left = max(game.max_guesses - attempts_made, 0)
 
 	last_guess = game.guesses[-1] if game.guesses else None
-	last_guess_result = to_guess_last_result(last_guess) if last_guess else None
+	last_guess_result = last_guess.to_last_result() if last_guess else None
 
 	return GameRead(
 		**game.model_dump(
@@ -31,32 +31,4 @@ def to_game_read(game: Game) -> GameRead:
 		attempts_made=attempts_made,
 		attempts_left=attempts_left,
 		last_result=last_guess_result,
-	)
-
-
-def to_guess_last_result(guess: Guess) -> GuessLastResult:
-	return GuessLastResult(
-		**guess.model_dump(
-			include={
-				"guess_value",
-				"exact_matches",
-				"partial_matches",
-				"created_at",
-			}
-		)
-	)
-
-
-def to_guess_read(guess: Guess) -> GuessRead:
-	return GuessRead(
-		**guess.model_dump(
-			include={
-				"id",
-				"game_id",
-				"guess_value",
-				"exact_matches",
-				"partial_matches",
-				"created_at",
-			}
-		)
 	)
