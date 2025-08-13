@@ -22,7 +22,6 @@ class Guess(BaseModel):
 	id: UUID = Field(default_factory=uuid4)
 	game_id: UUID
 	guess_value: list[str]
-	attempt_number: int
 	exact_matches: int = Field(default=0)
 	partial_matches: int = Field(default=0)
 	created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
