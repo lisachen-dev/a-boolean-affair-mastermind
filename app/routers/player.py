@@ -1,3 +1,4 @@
+import logging
 from uuid import UUID
 
 from fastapi import APIRouter
@@ -5,6 +6,7 @@ from fastapi import APIRouter
 from app.app_context import player_service
 from app.models.player import PlayerCreate, PlayerRead
 
+logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/players", tags=["players"])
 
 
