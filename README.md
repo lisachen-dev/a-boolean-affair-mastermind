@@ -1,12 +1,16 @@
 # A Boolean Affair 💃✨
 True. False. It’s complicated.
-
 > This relationship is strictly conditional.
 
 ---
 
 ## Table of Contents
-
+- [What is this?](#what-is-this)
+- [Quickstart](#quickstart)
+- [First Time Setup](#first-time-setup)
+  - [How to Play](/docs/SETUP_AND_GUIDE.md)
+- [API Reference](#api-reference)
+- [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -19,8 +23,8 @@ A FastAPI backend that implements the mastermind-style code‑breaking game with
 If you already have `uv` and `make` installed:
 
 ```bash
-uv sync     # Install dependencies from pyproject.toml
-make run    # Start the project
+uv sync          # install deps from pyproject.toml
+make run         # start the API (uvicorn)
 
 Open docs:
 # Swagger UI:   http://127.0.0.1:8000/docs
@@ -32,70 +36,41 @@ Open docs:
 
 ---
 
+
 ## First Time Setup
-
-### Install `uv`
-`uv` handles Python installation, virtual environments and dependency management.
-
-**Windows (Powershell)**
-
-    powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
-
-
-macOS and Linux
-
-    curl -LsSf https://astral.sh/uv/install.sh | sh
-
-### Install `make`
-Task runner for common scripts
-
-**Mac:** 
-You may need Xcode Command Line Tools:
-
-    xcode-select --install
-
-**Windows (CMD/Powershell):*** 
-1. **Install [Chocolatey](https://chocolatey.org/install#:~:text=Install%20Chocolatey%20for%20Individual%20Use%3A)** (Windows package manager)
-2. In PowerShell (as Administrator):
-    ```
-    choco install make
-    ```
-3. Verify Installation
-    ```
-    make --version
-    ```
-
-### Config
-
-[//]: # (TODO: env variables?) 
-
-[//]: # (TODO: [Linkedin Error Handling](https://learn.microsoft.com/en-us/linkedin/shared/api-guide/concepts/error-handling)
-
-Install dependencies
-
-    uv sync
-
-Run
-```bash
-make run
-# or: uv run uvicorn app.main:app --reload
-```
+> See **[SETUP_AND_GUIDE](/docs/SETUP_AND_GUIDE.md)**.md for full installation steps (uv, make, Windows/macOS notes), screenshots, and tips.
 
 ---
+
+## **How to Play**
+
+### Short version:
+1. POST /players/ → create player →  copy player_id. 
+2. POST /games/ → start game (pass player_id → omit other fields to use defaults) → copy game_id. 
+3. POST /games/{game_id}/guesses/ → pass game_id → send guesses like {"guess_value":["1","2","3","4"]}. 
+4. GET /games/{game_id} → check status, attempts_left, last_result.
+>Full walkthrough (with screenshots): [SETUP_AND_GUIDE.md](docs/SETUP_AND_GUIDE.md) and quiet → “Detailed How to Play.”
 
 ## API Reference
 
----
+### Games
+- `GET /games/` — Get all games
+- `POST /games/` — Start a new game
+- `DELETE /games/` — Delete all games
+- `GET /games/{game_id}` — Get a game by ID
+- `DELETE /games/{game_id}` — Delete a game by ID
 
-## How I'd Improve this
+### Players
+- `POST /players/` — Create a player
+- `GET /players/` — Get all players
+- `DELETE /players/` — Delete all players
+- `GET /players/{player_id}` — Get a player by ID
+- `DELETE /players/{player_id}` — Delete a player by ID
 
----
-
-## Screenshots
-
----
-
-## Credits
+### Guesses
+- `POST /games/{game_id}/guesses/` — Submit a guess
+- `GET /games/{game_id}/guesses/` — Get guess list
+- `GET /games/{game_id}/guesses/last` — Get last guess result
 
 ---
 
