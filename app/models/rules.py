@@ -25,11 +25,7 @@ class Rules(BaseModel):
 				raise ValueError("[RULE] Pool size not large enough to handle unique values")
 		return self
 
-	def validate_sequence(
-		self,
-		values: Sequence[str],
-		label: str = "[CODE]",
-	) -> None:
+	def validate_sequence(self, values: Sequence[str], label: str = "[CODE]") -> None:
 		if len(values) != self.code_length:
 			raise ValueError(f"{label} Length must be equivalent to {self.code_length}")
 

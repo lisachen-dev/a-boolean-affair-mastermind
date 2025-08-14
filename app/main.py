@@ -26,27 +26,27 @@ app = FastAPI(title="A Boolean Affair")
 
 # --- Validation Mapping
 @app.exception_handler(RequestValidationError)
-def request_validation_400(request: Request, exc: RequestValidationError):
+def request_validation_400(_request: Request, exc: RequestValidationError):
 	"""Map Pydantic validation to 400"""
 	logger.debug("Request validation failed: %s", exc.errors())
 	return JSONResponse(status_code=400, content={"detail": exc.errors()})
 
 
 @app.exception_handler(ValueError)
-def value_error_400(request: Request, exc: ValueError):
+def value_error_400(_request: Request, exc: ValueError):
 	"""Map domain validation to 400"""
 	return JSONResponse(status_code=400, content={"detail": str(exc)})
 
 
 @app.exception_handler(KeyError)
-def key_error_404(request: Request, exc: KeyError):
-	"""# Missing resource -> 404"""
+def key_error_404(_request: Request, exc: KeyError):
+	"""Missing resource -> 404"""
 	return JSONResponse(status_code=404, content={"detail": str(exc)})
 
 
 @app.exception_handler(Exception)
-def internal_error_500(request: Request, exc: Exception):
-	# Catch‑all 500
+def internal_error_500(_request: Request, exc: Exception):
+	"""Catch‑all 500"""
 	logger.exception("Unhandled server error: %s", exc)
 	return JSONResponse(
 		status_code=500, content={"detail": "An unexpected error occurred. Please try again later."}

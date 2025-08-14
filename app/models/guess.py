@@ -11,10 +11,7 @@ class Guess(BaseModel):
 	model_config = ConfigDict(extra="forbid")
 	id: UUID = Field(default_factory=uuid4)
 	game_id: UUID
-	guess_value: list[str] = Field(
-		example=["1", "2", "3", "4"],
-
-	)
+	guess_value: list[str] = Field(example=["1", "2", "3", "4"])
 	exact_matches: int = Field(default=0)
 	partial_matches: int = Field(default=0)
 	created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -63,5 +60,5 @@ class GuessCreate(BaseModel):
 	guess_value: list[str] = Field(
 		...,
 		description="Your guess as a list of strings. Each element is one digit or value.",
-		example=["1", "2", "3", "4"]
+		example=["1", "2", "3", "4"],
 	)

@@ -23,6 +23,7 @@ line-length = 100
 
 [tool.ruff.format]
 indent-style = "tab"
+skip-magic-trailing-comma=true
 
 [tool.ruff.lint.pep8-naming]
 ignore-names = ["GameCreate, GameBase"]
