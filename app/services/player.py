@@ -2,7 +2,7 @@ import logging
 from uuid import UUID
 
 from app.models.player import Player
-from app.repositories.player import PlayerStorage
+from app.storages.player import PlayerStorage
 
 logger = logging.getLogger(__name__)
 

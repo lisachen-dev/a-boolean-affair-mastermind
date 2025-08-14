@@ -2,11 +2,9 @@ import logging
 import secrets
 
 import requests
-from fastapi import HTTPException
 from requests.exceptions import ConnectionError, HTTPError, RequestException, Timeout
 
 from app.models.rules import Rules
-from app.utils.validators import validate_code_sequence
 
 logger = logging.getLogger(__name__)
 
@@ -23,28 +21,26 @@ class RandomService:
 		"""Generate a numeric secret code using either Python's secrets (internal) or random.org (external)"""
 
 		# decide if secret_code is generated from random.org or Python's internal tools
-		secret_code = (
-			self._generate_external_code(rules)
-			if self.is_external_code
-			else self._generate_internal_code(rules)
-		)
-		validate_code_sequence(
-			values=secret_code,
-			code_length=rules.code_length,
-			min_value=rules.min_value,
-			max_value=rules.max_value,
-			allow_repeats=rules.allow_repeats,
-			label="[SECRET]",
-		)
+		if self.is_external_code:
+			secret_code = self._generate_external_code(rules)
+		else:
+			secret_code = self._generate_internal_code(rules)
 
-		# logging successful generation of secret code
+		rules.validate_sequence(values=secret_code, label="[SECRET]")
+
 		logger.info(
-			"The secret code was generated using random.org!"
+			"Success! The secret code was generated using random.org!"
 		) if self.is_external_code else logger.info(
-			"The secret code was generated using Python's secrets module!"
+			"Success! The secret code was generated using Python's secrets module!"
 		)
-
 		return secret_code
+
+	@classmethod
+	def reroute_to_internal(cls, rules: Rules) -> tuple[str, ...]:
+		logger.info(
+			"Not enough unique values were generated from random.org. Beginning to generate internal secret code..."
+		)
+		return cls._generate_internal_code(rules)
 
 	@classmethod
 	def _generate_internal_code(cls, rules: Rules) -> tuple[str, ...]:
@@ -75,6 +71,7 @@ class RandomService:
 
 		try:
 			response = requests.get(cls.RANDOM_BASE_URL, params=payload, timeout=10)
+			response.raise_for_status()
 			logger.debug(
 				"Random.org response: [status: %s] | response: %s | url: %s",
 				response.status_code,
@@ -82,29 +79,17 @@ class RandomService:
 				response.url,
 			)
 
-		except Timeout:
-			raise HTTPException(status_code=500, detail="The request to random.org timed out")
+		except (Timeout, ConnectionError, HTTPError, RequestException) as e:
+			logger.info("The request to random.org timed out")
+			return cls._generate_internal_code(rules=rules)
 
-		except ConnectionError:
-			raise HTTPException(status_code=500, detail="Random.org returned a connection error")
-
-		except HTTPError:
-			raise HTTPException(status_code=500, detail="Could not connect to random.org")
-
-		except RequestException:
-			raise HTTPException(
-				status_code=500,
-				detail="An unexpected error occurred while connecting with random.org",
-			)
-
-		# convert the response text to a usable list obj
 		lines = []
 		for line in response.text.splitlines():
 			trimmed_line = line.strip()
 			if trimmed_line:
 				lines.append(trimmed_line)
 
-		# remove duplicates if not allowed and retry until we get enough unique values
+		# remove duplicates if not allowed and retry until we get enough values
 		if not rules.allow_repeats:
 			tracking_set = set()
 			unique_values = []
@@ -116,7 +101,7 @@ class RandomService:
 
 			# if we didn't get enough unique values, fallback to the internal method.
 			if len(unique_values) < rules.code_length:
-				return cls._generate_internal_code(rules)
+				return cls.reroute_to_internal(rules)
 
 			lines = unique_values
 

@@ -1,9 +1,9 @@
 from app.constants import IS_EXTERNAL_CODE
-from app.repositories.game import GameStorage
-from app.repositories.player import PlayerStorage
 from app.services.game import GameService
 from app.services.player import PlayerService
 from app.services.random import RandomService
+from app.storages.game import GameStorage
+from app.storages.player import PlayerStorage
 
 # repositories
 _game_storage = GameStorage()

@@ -11,7 +11,7 @@ router = APIRouter(prefix="/games/{game_id}/guesses", tags=["Guesses"])
 
 @router.post("/", response_model=Guess)
 def submit_guess(game_id: UUID, new_guess: GuessCreate) -> Guess:
-	return game_service.submit_guess(game_id=game_id, new_guess=new_guess.guess_value)
+	return game_service.submit_guess(game_id=game_id, guess_value=new_guess.guess_value)
 
 
 @router.get("/", response_model=list[Guess])
