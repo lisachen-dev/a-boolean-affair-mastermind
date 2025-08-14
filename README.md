@@ -20,6 +20,8 @@ True. False. It’s complicated.
 ## What is this?
 A FastAPI backend that implements the mastermind-style code‑breaking game with clean, testable logic and REST endpoints.
 
+Improvements? I have ideas. I guess you'll just have to talk to me!
+
 ---
 
 ## Quickstart
