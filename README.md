@@ -50,7 +50,7 @@ Open docs:
 2. POST /games/ → start game (pass player_id → omit other fields to use defaults) → copy game_id. 
 3. POST /games/{game_id}/guesses/ → pass game_id → send guesses like {"guess_value":["1","2","3","4"]}. 
 4. GET /games/{game_id} → check status, attempts_left, last_result.
->Full walkthrough (with screenshots): [SETUP_AND_GUIDE.md](docs/SETUP_AND_GUIDE.md/#setup--detailed-guide) and quiet → “Detailed How to Play.”
+>Full walkthrough (with screenshots): [SETUP_AND_GUIDE.md](docs/SETUP_AND_GUIDE.md/) and quiet → “Detailed How to Play.”
 
 ## API Reference
 
