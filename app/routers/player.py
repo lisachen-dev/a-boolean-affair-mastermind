@@ -4,26 +4,22 @@ from uuid import UUID
 from fastapi import APIRouter
 
 from app.app_context import player_service
-from app.models.player import PlayerCreate, PlayerRead
-from app.utils.mappers import to_player_read
+from app.models.player import Player
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/players", tags=["Players"])
 
 
-@router.post("/", response_model=PlayerRead)
-def create_player(new_player: PlayerCreate):
-	player = player_service.create(new_player.name)
-	return to_player_read(player)
+@router.post("/", response_model=Player)
+def create_player(name: str) -> Player:
+	return player_service.create(name)
 
 
-@router.get("/{player_id}", response_model=PlayerRead)
+@router.get("/{player_id}", response_model=Player)
 def get_player(player_id: UUID):
-	player = player_service.get(player_id=player_id)
-	return to_player_read(player)
+	return player_service.get(player_id=player_id)
 
 
-@router.get("/", response_model=list[PlayerRead])
+@router.get("/", response_model=list[Player])
 def get_all_players():
-	players = player_service.get_all()
-	return [to_player_read(player) for player in players]
+	return player_service.get_all()

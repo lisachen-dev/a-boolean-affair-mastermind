@@ -1,7 +1,7 @@
 import logging
 from uuid import UUID
 
-from app.models.player import Player, PlayerCreate
+from app.models.player import Player
 from app.repositories.player import PlayerStorage
 
 logger = logging.getLogger(__name__)
@@ -14,7 +14,7 @@ class PlayerService:
 	def create(self, name: str) -> Player:
 		if name is None or not str(name).strip():
 			raise ValueError("Name is required")
-		player = self.player_storage.create(PlayerCreate(name=name))
+		player = self.player_storage.create(name=name)
 		logger.info("Player registered: id=%s name=%s", player.id, player.name)
 		return player
 

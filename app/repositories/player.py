@@ -1,7 +1,7 @@
 import logging
 from uuid import UUID
 
-from app.models.player import Player, PlayerCreate
+from app.models.player import Player
 
 logger = logging.getLogger(__name__)
 
@@ -10,8 +10,8 @@ class PlayerStorage:
 	def __init__(self) -> None:
 		self._players: dict[UUID, Player] = {}
 
-	def create(self, player_create: PlayerCreate) -> Player:
-		player = Player(name=player_create.name)
+	def create(self, name: str) -> Player:
+		player = Player(name=name)
 		self._players[player.id] = player
 		logger.info("Player created with id=%s, name=%s", player.id, player.name)
 		return player
