@@ -21,7 +21,26 @@ logger = logging.getLogger(__name__)
 logger.info("You have now started A Boolean Affair!")
 
 # --- app setup ---
-app = FastAPI(title="A Boolean Affair")
+app = FastAPI(
+	title="A Boolean Affair",
+	version="0.1.0",
+	description="""
+### True. False. It’s complicated.
+> #### This relationship is strictly conditional.
+
+### How It Works:
+- **Players**: Create a player profile first.
+- **Games**: Start a game with your desired rules or defaults.
+- **Guesses**: Try to break the secret code within the allowed number of guesses.
+
+Use the sections below to interact with the API directly.
+""",
+	openapi_tags=[
+		{"name": "Players", "description": "Manage player profiles."},
+		{"name": "Games", "description": "Start and manage games."},
+		{"name": "Guesses", "description": "Submit and view guesses."},
+	]
+)
 
 
 # --- Validation Mapping
