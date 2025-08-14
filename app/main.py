@@ -21,10 +21,12 @@ logger = logging.getLogger(__name__)
 logger.info("You have now started A Boolean Affair!")
 
 # --- app setup ---
+
 app = FastAPI(
 	title="A Boolean Affair",
 	version="0.1.0",
 	description="""
+	
 ### True. False. It’s complicated.
 > #### This relationship is strictly conditional.
 
@@ -39,7 +41,7 @@ Use the sections below to interact with the API directly.
 		{"name": "Players", "description": "Manage player profiles."},
 		{"name": "Games", "description": "Start and manage games."},
 		{"name": "Guesses", "description": "Submit and view guesses."},
-	]
+	],
 )
 
 
