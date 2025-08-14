@@ -3,11 +3,10 @@ from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field
 
-"""
-DOMAIN (state and logic)
-"""
 
-
+# ----
+# DOMAIN (state and logic)
+# ----
 class Guess(BaseModel):
 	id: UUID = Field(default_factory=uuid4)
 	game_id: UUID
@@ -24,11 +23,9 @@ class Guess(BaseModel):
 		)
 
 
-"""
-SCHEMAS (request/response)
-"""
-
-
+# ----
+# SCHEMAS (request/response)
+# ----
 class GuessLastResult(BaseModel):
 	guess_value: list[str]
 	exact_matches: int
