@@ -29,5 +29,5 @@ class PlayerService:
 	def delete_player(self, player_id: UUID) -> None:
 		return self.player_storage.clear_player(player_id=player_id)
 
-	def delete_all(self, player_id: UUID) -> None:
+	def delete_all(self) -> None:
 		return self.player_storage.clear_all_players()

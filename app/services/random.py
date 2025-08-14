@@ -21,18 +21,25 @@ class RandomService:
 		"""Generate a numeric secret code using either Python's secrets (internal) or random.org (external)"""
 
 		# decide if secret_code is generated from random.org or Python's internal tools
-		if self.is_external_code:
-			secret_code = self._generate_external_code(rules)
-		else:
+		try:
+			secret_code = (
+				self._generate_external_code(rules)
+				if self.is_external_code
+				else self._generate_internal_code(rules)
+			)
+			rules.validate_sequence(values=secret_code, label="[SECRET]")
+
+		except ValueError:
+			# If rules/sequence validation fails for any reason, fall back to internal generation
+			logger.info("external code invalid per rules - falling back to internal generator")
 			secret_code = self._generate_internal_code(rules)
+			rules.validate_sequence(values=secret_code, label="[SECRET]")
 
-		rules.validate_sequence(values=secret_code, label="[SECRET]")
+		if self.is_external_code:
+			logger.info("Success! The secret code was generated using random.org")
+		else:
+			logger.info("Success! The secret code was generated using Python's secrets module!")
 
-		logger.info(
-			"Success! The secret code was generated using random.org!"
-		) if self.is_external_code else logger.info(
-			"Success! The secret code was generated using Python's secrets module!"
-		)
 		return secret_code
 
 	@classmethod
@@ -83,6 +90,7 @@ class RandomService:
 			logger.info("The request to random.org timed out")
 			return cls._generate_internal_code(rules=rules)
 
+		# parse non empty lines
 		lines = []
 		for line in response.text.splitlines():
 			trimmed_line = line.strip()
@@ -92,17 +100,18 @@ class RandomService:
 		# remove duplicates if not allowed and retry until we get enough values
 		if not rules.allow_repeats:
 			tracking_set = set()
-			unique_values = []
+			final_code_values: list[str] = []
 			for value in lines:
 				if value not in tracking_set:
 					tracking_set.add(value)
-				if len(unique_values) == rules.code_length:
+					final_code_values.append(value)
+				if len(final_code_values) == rules.code_length:
 					break
 
 			# if we didn't get enough unique values, fallback to the internal method.
-			if len(unique_values) < rules.code_length:
+			if len(final_code_values) < rules.code_length:
 				return cls.reroute_to_internal(rules)
 
-			lines = unique_values
+			lines = final_code_values
 
 		return tuple(lines)

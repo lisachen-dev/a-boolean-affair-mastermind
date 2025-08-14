@@ -41,12 +41,12 @@ class GameStorage:
 	def exists(self, game_id: UUID) -> bool:
 		return game_id in self._games
 
-	def clear_game(self, game_id:UUID) -> None:
+	def clear_game(self, game_id: UUID) -> None:
 		if game_id in self._games:
 			del self._games[game_id]
-			logger.info("Game &s was removed from storage", game_id)
+			logger.info("Game %s was removed from storage", game_id)
 		else:
-			logger.info("Tried to remove game %s, but it just doesn't exist", game_id)
+			logger.info("Tried to remove game %s, but it doesn't exist", game_id)
 
 	def clear(self) -> None:
 		num_of_games = len(self._games)

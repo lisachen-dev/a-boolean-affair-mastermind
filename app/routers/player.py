@@ -24,10 +24,12 @@ def get_player(player_id: UUID):
 def get_all_players():
 	return player_service.get_all()
 
+
 @router.delete("/{player_id}", description="Delete player by ID")
 def delete_player(player_id: UUID) -> None:
 	return player_service.delete_player(player_id)
 
-@router.delete("/",description="Delete all players")
+
+@router.delete("/", description="Delete all players")
 def delete_all_players() -> None:
 	return player_service.delete_all_games()

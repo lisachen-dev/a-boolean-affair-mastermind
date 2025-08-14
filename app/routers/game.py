@@ -29,11 +29,12 @@ def get_game(game_id: UUID) -> GameView:
 	game = game_service.get_game(game_id)
 	return GameView.from_game(game)
 
+
 @router.delete("/{game_id}", description="Delete game by ID")
 def delete_game(game_id: UUID) -> None:
 	return game_service.delete_game(game_id)
 
 
-@router.delete("/",description="Delete all games")
+@router.delete("/", description="Delete all games")
 def delete_all_games() -> None:
 	return game_service.delete_all_games()
