@@ -53,6 +53,12 @@ class GameService:
 		logger.debug("Returning %d games", len(games))
 		return games
 
+	def delete_game(self, game_id: UUID) -> None:
+		return self.game_storage.clear_game(game_id)
+
+	def delete_all_games(self) -> None:
+		return self.game_storage.clear()
+
 	# GUESS
 
 	def submit_guess(self, game_id: UUID, guess_value: list[str]) -> Guess:

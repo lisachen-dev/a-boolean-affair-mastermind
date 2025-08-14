@@ -28,5 +28,14 @@ class PlayerStorage:
 	def exists(self, player_id: UUID) -> bool:
 		return player_id in self._players
 
-	def clear(self) -> None:
+	def clear_player(self, player_id:UUID) -> None:
+		if player_id in self._players:
+			del self._players[player_id]
+			logger.info("Player &s was removed from storage", player_id)
+		else:
+			logger.info("Tried to remove player %s, but it just doesn't exist", player_id)
+
+	def clear_all_players(self) -> None:
+		num_of_players = len(self._players)
 		self._players.clear()
+		logger.info("Player information has been cleared! %d removed", num_of_players)
