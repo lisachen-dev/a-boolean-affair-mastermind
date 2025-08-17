@@ -1,6 +1,6 @@
 # A Boolean Affair
 
-<img src="app/assets/logo.png" alt="A Boolean Affair logo" width="1024">
+<img src="app/assets/logo.png" alt="A Boolean Affair logo" width="300">
 
 True. False. It’s complicated.
 > This relationship is strictly conditional.
@@ -8,7 +8,6 @@ True. False. It’s complicated.
 ---
 
 ## Table of Contents
-- [What is this?](#what-is-this)
 - [Quickstart](#quickstart)
 - [First Time Setup](#first-time-setup)
   - [How to Play](/docs/SETUP_AND_GUIDE.md)
@@ -19,8 +18,6 @@ True. False. It’s complicated.
 
 ## What is this?
 A FastAPI backend that implements the mastermind-style code‑breaking game with clean, testable logic and REST endpoints.
-
-Improvements? I have ideas. I guess you'll just have to talk to me!
 
 ---
 
@@ -44,7 +41,7 @@ Open docs:
 
 
 ## First Time Setup
-> See **[SETUP_AND_GUIDE](/docs/SETUP_AND_GUIDE.md)**.md for full installation steps (uv, make, Windows/macOS notes), screenshots, and tips.
+> See **[SETUP_AND_GUIDE](/docs/SETUP_AND_GUIDE.md)** for full installation steps (uv, make, Windows/macOS notes), screenshots, and tips.
 
 ---
 
@@ -58,7 +55,6 @@ Open docs:
     {"guess_value":["1","2","3","4"]}
    ```
 4. `GET /games/{game_id}` → check status, attempts_left, last_result.
->Full walkthrough (with screenshots): [SETUP_AND_GUIDE.md](/docs/SETUP_AND_GUIDE.md) and quiet → “Detailed How to Play.”
 
 ## API Reference
 
@@ -91,7 +87,7 @@ Point the IDE at the project venv::
 2. File > Invalidate caches > Just select OK.
 
 ### `uv` and Switching Between Projects
-You do not need to activate/deactive virtual environments manually.
+You do not need to activate/deactivate virtual environments manually.
 `uv` will auto use `.venv` for the current project directory.
 
 This warning means your shell still has an environment variable from another project:

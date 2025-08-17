@@ -40,7 +40,6 @@ _You may need Xcode Command Line Tools:_
 1. **Install [Chocolatey](https://chocolatey.org/install#:~:text=Set%2DExecutionPolicy%20Bypass%20%2DScope%20Process%20%2DForce%3B%20%5BSystem.Net.ServicePointManager%5D%3A%3ASecurityProtocol%20%3D%20%5BSystem.Net.ServicePointManager%5D%3A%3ASecurityProtocol%20%2Dbor%203072%3B%20iex%20((New%2DObject%20System.Net.WebClient).DownloadString(%27https%3A//community.chocolatey.org/install.ps1%27))** (Windows package manager)
 2. In PowerShell (as Administrator):
 
-   **xcode-select --install**
     ```powershell
     choco install make
     ```
@@ -122,7 +121,7 @@ Open your browser to link provided in your terminal. If you don't see it, feel f
 yields:
    > ![img.png](../app/assets/game_response_default.png)
 
-* **To use Custom rules: ** You can add all or omit fields like `code_length`, `max_guesses`, `min_value`, `max_value` or `allow_requests` to change how the game plays.
+* **To use Custom rules: ** You can add all or omit fields like `code_length`, `max_guesses`, `min_value`, `max_value` or `allow_repeats` to change how the game plays.
 ```json
 {
    "player_id": "194a1ccc-c682-44e5-9c10-be57f82a8038",
