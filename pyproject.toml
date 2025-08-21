@@ -15,6 +15,7 @@ dependencies = [
     "logging==0.4.9.6",
     "python-dotenv==1.1.1",
     "ruff==0.12.9",
+    "pytest==8.4.1",
 ]
 
 [tool.ruff]
