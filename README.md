@@ -98,8 +98,8 @@ VIRTUAL_ENV=/path/to/other/.venv does not match the project environment path `.v
 **Fix**
 
 ```bash
-unset VIRTUAL_ENV
-uv sync
+    unset VIRTUAL_ENV
+    uv sync
 ```
 
 ### Managing Dependencies
