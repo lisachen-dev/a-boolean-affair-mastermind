@@ -8,6 +8,13 @@ description = "A FastAPI-based Mastermind-style guessing game"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "fastapi[standard]==0.116.1",
+    "logging==0.4.9.6",
+    "python-dotenv==1.1.1",
+    "pydantic==2.11.7",
+    "pytest==8.4.1",
+    "requests==2.32.4",
+    "ruff==0.12.9",
     "uvicorn==0.35.0",
     "fastapi[standard]==0.116.1",
     "pydantic==2.11.7",
@@ -15,6 +22,11 @@ dependencies = [
     "logging==0.4.9.6",
     "python-dotenv==1.1.1",
     "ruff==0.12.9",
+]
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.4",
+    "pytest-cov"
 ]
 
 [tool.ruff]
